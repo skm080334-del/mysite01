@@ -5,6 +5,7 @@ import { ArrowLeft, EyeOff } from "lucide-react";
 import { siteConfig } from "@/site.config";
 import { isAdmin, isAdminPasswordSet } from "@/lib/admin-auth";
 import { getAdminClient } from "@/lib/supabase-admin";
+import { getHeroText, HERO_TEXT_FIELDS } from "@/lib/data";
 import type { Item } from "@/lib/types";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
@@ -12,12 +13,16 @@ import { logout } from "./actions";
 import { LoginForm } from "./_components/login-form";
 import { ItemForm } from "./_components/item-form";
 import { DeleteButton } from "./_components/delete-button";
+import { HeroForm } from "./_components/hero-form";
+
+/** 카드 섹션 탭과 별도로 있는 '히어로 문구' 탭의 주소 값 */
+const HERO_TAB = "hero";
 
 /* 관리자 페이지 (주소: /admin)
    1) 비밀번호가 설정 안 됐으면 → 설정 안내
    2) 로그인 안 했으면 → 로그인 화면
    3) Supabase 연결 안 됐으면 → 연결 안내
-   4) 모두 준비됐으면 → 섹션별 카드(항목) 관리 */
+   4) 모두 준비됐으면 → 히어로 문구 수정, 섹션별 카드(항목) 관리 */
 
 export const metadata = { title: "관리자" };
 
@@ -75,19 +80,12 @@ export default async function AdminPage(props: PageProps<"/admin">) {
 
   const sections = siteConfig.adminSections;
   const requested = typeof searchParams.section === "string" ? searchParams.section : undefined;
+  const isHeroTab = requested === HERO_TAB;
   const current = sections.find((s) => s.key === requested) ?? sections[0];
 
-  const { data, error } = await supabase
-    .from("items")
-    .select("*")
-    .eq("section", current.key)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: true });
-  const items = (data ?? []) as Item[];
-
-  return (
-    <Container className="py-10">
-      {/* 상단 바 */}
+  // 상단 바 + 탭 (모든 탭에서 같이 씀)
+  const header = (
+    <>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Button asChild variant="ghost" size="icon" aria-label="사이트로 돌아가기">
@@ -104,14 +102,67 @@ export default async function AdminPage(props: PageProps<"/admin">) {
         </form>
       </div>
 
-      {/* 섹션 탭 (site.config.ts 의 adminSections) */}
+      {/* 탭: 히어로 문구 + 카드 섹션들 (site.config.ts 의 adminSections) */}
       <nav className="mt-8 flex flex-wrap gap-2">
+        <Button asChild size="sm" variant={isHeroTab ? "default" : "outline"}>
+          <Link href={`/admin?section=${HERO_TAB}`}>히어로 문구</Link>
+        </Button>
         {sections.map((s) => (
-          <Button key={s.key} asChild size="sm" variant={s.key === current.key ? "default" : "outline"}>
+          <Button
+            key={s.key}
+            asChild
+            size="sm"
+            variant={!isHeroTab && s.key === current.key ? "default" : "outline"}
+          >
             <Link href={`/admin?section=${s.key}`}>{s.label}</Link>
           </Button>
         ))}
       </nav>
+    </>
+  );
+
+  if (isHeroTab) {
+    const hero = await getHeroText();
+    const values: Record<string, string> = {
+      "hero.eyebrow": hero.eyebrow,
+      "hero.title": hero.title,
+      "hero.description": hero.description,
+      "hero.primaryCta.label": hero.primaryCta.label,
+      "hero.primaryCta.href": hero.primaryCta.href,
+      "hero.secondaryCta.label": hero.secondaryCta.label,
+      "hero.secondaryCta.href": hero.secondaryCta.href,
+    };
+    const { error: tableError } = await supabase.from("site_texts").select("key").limit(1);
+
+    return (
+      <Container className="py-10">
+        {header}
+        {tableError ? (
+          <p className="mt-6 rounded-lg border border-destructive/40 p-4 text-sm text-destructive">
+            문구 표를 불러오지 못했습니다: {tableError.message}
+            <br />
+            supabase/schema.sql 을 Supabase SQL Editor 에서 다시 실행하세요.
+          </p>
+        ) : null}
+        <section className="mt-8 max-w-2xl rounded-xl border p-6">
+          <h2 className="mb-5 text-lg font-semibold">히어로(첫 화면) 문구</h2>
+          <HeroForm fields={HERO_TEXT_FIELDS.map((f) => ({ ...f, value: values[f.key] }))} />
+        </section>
+      </Container>
+    );
+  }
+
+  const { data, error } = await supabase
+    .from("items")
+    .select("*")
+    .eq("section", current.key)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  const items = (data ?? []) as Item[];
+
+  return (
+    <Container className="py-10">
+      {header}
 
       {error ? (
         <p className="mt-6 rounded-lg border border-destructive/40 p-4 text-sm text-destructive">
