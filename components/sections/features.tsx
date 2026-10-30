@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { siteConfig } from "@/site.config";
 import { getItems } from "@/lib/data";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/layout/section-header";
+import { ShapeTile, stripTiles } from "@/components/ui/shapes";
 
 /* 기능(항목) 섹션.
    - 제목/설명: site.config.ts 의 features
@@ -26,9 +27,9 @@ export async function Features() {
           <p className="mt-12 text-muted-foreground">아직 등록된 항목이 없습니다.</p>
         ) : (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => {
+            {items.map((item, index) => {
               const card = (
-                <article className="group h-full overflow-hidden rounded-xl border bg-card transition-shadow hover:shadow-lg">
+                <article className="group h-full overflow-hidden rounded-3xl bg-card transition-transform duration-300 hover:-translate-y-1">
                   <div className="relative aspect-[4/3] bg-muted">
                     {item.image_url ? (
                       <Image
@@ -39,13 +40,15 @@ export async function Features() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-muted-foreground">
-                        <Sparkles className="size-8" />
-                      </div>
+                      /* 사진이 없으면 도형 장식 (카드마다 다른 도형) */
+                      <ShapeTile
+                        {...stripTiles[index % stripTiles.length]}
+                        className="size-full p-[22%]"
+                      />
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="flex items-center justify-between gap-2 text-lg font-semibold">
+                    <h3 className="flex items-center justify-between gap-2 text-xl font-bold">
                       {item.title}
                       {item.link_url ? (
                         <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

@@ -14,9 +14,15 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
+        <Link href="/" className="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight">
+          {/* 로고 앞 도형 세 개 */}
+          <span aria-hidden className="flex items-center gap-0.5">
+            <span className="size-3 rounded-r-full bg-primary" />
+            <span className="size-3 rounded-full bg-secondary" />
+            <span className="size-3 rounded-full bg-accent" />
+          </span>
           {siteConfig.name}
         </Link>
 
@@ -26,7 +32,7 @@ export function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
             >
               {item.label}
             </a>
