@@ -16,9 +16,9 @@ export const siteConfig = {
 
   /* 상단 메뉴 (href 의 #이름 은 아래 섹션의 id 와 같아야 해당 위치로 이동) */
   nav: [
-    { label: "소개", href: "#about" },
-    { label: "기능", href: "#features" },
-    { label: "연락처", href: "#contact" },
+    { label: "프로필소개", href: "#profile" },
+    { label: "수업과정", href: "#courses" },
+    { label: "수강신청", href: "#apply" },
   ],
   /* 메뉴 오른쪽 버튼 (누르면 새 탭에서 관리자 페이지가 열림) */
   adminButton: { label: "비밀 버튼", href: "/admin" },
@@ -29,8 +29,8 @@ export const siteConfig = {
     title: "생각을 바로\n화면으로 만듭니다",
     description:
       "이 문장을 바꿔 나를 소개해 보세요. site.config.ts 파일에서 글자만 바꾸면 여기가 바뀝니다.",
-    primaryCta: { label: "더 알아보기", href: "#features" },
-    secondaryCta: { label: "연락하기", href: "#contact" },
+    primaryCta: { label: "더 알아보기", href: "#courses" },
+    secondaryCta: { label: "연락하기", href: "#apply" },
   },
 
   /* 소개 섹션 */
@@ -45,9 +45,17 @@ export const siteConfig = {
 
   /* 기능(항목) 섹션의 제목 — 카드 목록 자체는 관리자 페이지(/admin)에서 관리 */
   features: {
-    eyebrow: "Features",
-    title: "기능",
+    eyebrow: "Courses",
+    title: "수업과정",
     description: "관리자 페이지에서 카드를 추가·수정·삭제할 수 있는 영역입니다.",
+    /* 첫 번째 카드 그림 자리에서 도는 천안 원통 애니메이션 글자 */
+    loop: {
+      words: ["호두과자", "천안삼거리", "뚜쥬르", "흥타령", "독립기념관"],
+      ring: "천안을 배우는 AI 수업", // 아래 작은 고리 문구
+      top: "CHEONAN AI CLASS", // 위쪽 작은 글씨
+      badge: "천안 · 2026",
+      chip: "천안을 배우는 AI 수업", // 맨 아래 주황 배지
+    },
   },
 
   /* 연락처 섹션 */

@@ -10,21 +10,19 @@ export function Contact() {
   const { contact } = siteConfig;
 
   return (
-    <section id="contact" className="scroll-mt-16 py-24">
+    <section id="apply" className="scroll-mt-16 py-24">
       <Container>
-        <div className="relative overflow-hidden rounded-[2rem] bg-accent px-6 py-16 text-center text-accent-foreground sm:px-12">
-          {/* 모서리 장식 도형 */}
-          <div aria-hidden className="absolute -left-10 -top-10 size-32 rounded-full bg-secondary" />
-          <div aria-hidden className="absolute -bottom-12 -right-6 h-24 w-40 rounded-t-full bg-primary" />
+        <div className="glass relative overflow-hidden rounded-[2rem] px-6 py-16 text-center sm:px-12">
+          {/* 뒤쪽 보라 빛 */}
+          <div aria-hidden className="bg-brand-gradient absolute -bottom-24 left-1/2 h-48 w-2/3 -translate-x-1/2 rounded-full opacity-40 blur-3xl" />
           <SectionHeader
             eyebrow={contact.eyebrow}
             title={contact.title}
             description={contact.description}
             className="relative mx-auto"
-            inverted
           />
           <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg" variant="secondary">
+            <Button asChild size="lg">
               <a href={`mailto:${contact.email}`}>
                 <Mail />
                 {contact.email}
@@ -36,7 +34,6 @@ export function Contact() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-transparent text-foreground"
               >
                 <a href={link.href} target="_blank" rel="noreferrer">
                   {link.label}

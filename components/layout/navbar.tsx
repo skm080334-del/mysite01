@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 
 import { siteConfig } from "@/site.config";
 import { Container } from "@/components/layout/container";
@@ -14,14 +14,12 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <Container className="flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display text-xl font-extrabold tracking-tight">
-          {/* 로고 앞 도형 세 개 */}
-          <span aria-hidden className="flex items-center gap-0.5">
-            <span className="size-3 rounded-r-full bg-primary" />
-            <span className="size-3 rounded-full bg-secondary" />
-            <span className="size-3 rounded-full bg-accent" />
+          {/* 로고 앞 아이콘 상자 */}
+          <span aria-hidden className="icon-box size-8 rounded-lg">
+            <Bell className="size-4" />
           </span>
           {siteConfig.name}
         </Link>
@@ -32,7 +30,7 @@ export function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              className="text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
+              className="text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
             </a>

@@ -1,0 +1,272 @@
+/* 천안 단어 원통 루프 애니메이션 (수업과정 첫 번째 카드)
+   참고 영상의 주황·빨강 입체 글자 느낌을 내려고, 이 장면 안의 색은 일부러 고정 색을 씁니다. */
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  container-type: inline-size;
+  perspective: 900px;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 38%, #8b3dff 0%, #4a17b8 40%, #170a4d 75%, #0b0b2e 100%);
+}
+
+/* 뒤쪽 벽 격자 */
+.wall {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 8cqw 8cqw;
+  mask-image: radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* 앞으로 흘러오는 바닥 격자 */
+.floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -6%;
+  height: 60%;
+  background-image:
+    linear-gradient(rgba(214, 180, 255, 0.45) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(214, 180, 255, 0.45) 1px, transparent 1px);
+  background-size: 6cqw 6cqw;
+  transform: rotateX(72deg);
+  transform-origin: bottom;
+  mask-image: linear-gradient(to top, #000 20%, transparent 90%);
+  animation: floor 1.6s linear infinite;
+}
+@keyframes floor {
+  to {
+    background-position: 0 6cqw;
+  }
+}
+
+/* 위쪽 작은 글씨 */
+.top {
+  position: absolute;
+  top: 5cqw;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  text-align: center;
+  font-family: "Black Han Sans", sans-serif;
+  font-size: 3.4cqw;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-shadow: 0 0 1.2cqw rgba(255, 255, 255, 0.6);
+}
+.badge {
+  display: inline-block;
+  margin-top: 1.4cqw;
+  padding: 0.5cqw 2cqw;
+  border: 0.3cqw solid rgba(255, 255, 255, 0.7);
+  border-radius: 1cqw;
+  font-size: 2.6cqw;
+  letter-spacing: 0.08em;
+}
+
+/* 원통 무대: 살짝 위에서 내려다보게 기울임 */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform-style: preserve-3d;
+  transform: rotateX(-14deg) rotateZ(-5deg);
+}
+
+/* 글자 고리 (원통 둘레를 따라 계속 회전) */
+.ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  animation: roll var(--t, 16s) linear infinite;
+}
+.reverse {
+  animation-direction: reverse;
+}
+@keyframes roll {
+  from {
+    transform: translateY(var(--y, 0)) rotateY(0);
+  }
+  to {
+    transform: translateY(var(--y, 0)) rotateY(-360deg);
+  }
+}
+
+/* 글자 한 칸: 원통 둘레의 자기 각도로 돌아가 바깥쪽을 봄 */
+.ch {
+  position: absolute;
+  width: 1.1em;
+  height: 1em;
+  margin: -0.5em 0 0 -0.55em;
+  text-align: center;
+  line-height: 1;
+  font-family: "Black Han Sans", sans-serif;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--a)) translateZ(var(--r));
+}
+.front,
+.back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+/* 뒷면: 원통 안쪽에서 비쳐 보이는 흐린 거울 글자 */
+.back {
+  transform: rotateY(180deg) scaleX(-1);
+  color: rgba(255, 170, 120, 0.28);
+}
+
+.main .ch {
+  font-size: 7.5cqw;
+}
+/* 앞면: 주황→빨강→자주로 겹겹이 쌓은 입체 글자 */
+.main .front {
+  color: #fff4d1;
+  text-shadow:
+    0.012em 0.012em 0 #ffd23f, 0.024em 0.024em 0 #ffc233, 0.036em 0.036em 0 #ffb020,
+    0.048em 0.048em 0 #ff9a1f, 0.06em 0.06em 0 #ff7f1f, 0.072em 0.072em 0 #ff6421,
+    0.084em 0.084em 0 #f44a24, 0.096em 0.096em 0 #e53228, 0.108em 0.108em 0 #c9202e,
+    0.12em 0.12em 0 #a61434, 0 0 0.4em rgba(255, 120, 40, 0.55);
+}
+.main .dot .front {
+  color: #ffe14d;
+  text-shadow: 0 0 0.3em #ffd000;
+}
+
+/* 아래 작은 글자 고리 (반대로 회전) */
+.sub .ch {
+  font-size: 3.2cqw;
+  width: 1em;
+  margin-left: -0.5em;
+}
+.sub .front {
+  color: #fff;
+  text-shadow: 0 0 0.5em rgba(255, 255, 255, 0.7);
+}
+.sub .back {
+  color: rgba(255, 255, 255, 0.18);
+}
+
+/* 아래 주황 배지 */
+.chip {
+  position: absolute;
+  left: 50%;
+  bottom: 4cqw;
+  z-index: 5;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 0.8cqw 2.4cqw;
+  border-radius: 1cqw;
+  background: linear-gradient(180deg, #ff9a1f, #e53228);
+  font-family: "Black Han Sans", sans-serif;
+  font-size: 2.6cqw;
+  letter-spacing: 0.1em;
+  color: #fff;
+  box-shadow: 0 0 2cqw rgba(255, 100, 40, 0.7);
+}
+
+/* 떠다니는 3D 큐브 */
+.cube {
+  position: absolute;
+  z-index: 4;
+  width: var(--s);
+  height: var(--s);
+  transform-style: preserve-3d;
+  animation:
+    spin var(--d) linear infinite,
+    bob 3s ease-in-out infinite;
+}
+.cube i {
+  position: absolute;
+  inset: 0;
+  background: var(--c);
+  border: 0.2cqw solid rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 1.5cqw rgba(255, 255, 255, 0.4);
+}
+.cube i:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+.cube i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.cube i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); filter: brightness(0.8); }
+.cube i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); filter: brightness(0.8); }
+.cube i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); filter: brightness(1.15); }
+.cube i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); filter: brightness(0.6); }
+@keyframes spin {
+  to {
+    transform: rotateX(360deg) rotateY(720deg);
+  }
+}
+@keyframes bob {
+  50% {
+    translate: 0 -2cqw;
+  }
+}
+
+/* 반짝이 */
+.spark {
+  position: absolute;
+  z-index: 4;
+  color: #ffe14d;
+  font-size: var(--z, 4cqw);
+  text-shadow: 0 0 1.5cqw #ffd000;
+  animation: twinkle 1.6s ease-in-out infinite;
+  animation-delay: var(--dl, 0s);
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.4) rotate(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.1) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+/* 대각선 빛줄기 */
+.streak {
+  position: absolute;
+  top: 30%;
+  left: -20%;
+  z-index: 2;
+  width: 140%;
+  height: 1cqw;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), #ffd23f, transparent);
+  transform: rotate(-30deg);
+  filter: blur(0.2cqw);
+  animation: sweep 4s ease-in-out infinite;
+}
+.streakTwo {
+  top: 70%;
+  height: 0.6cqw;
+  animation-delay: 2s;
+}
+@keyframes sweep {
+  0% {
+    translate: -70% 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  60%,
+  100% {
+    translate: 70% 0;
+    opacity: 0;
+  }
+}
+
+/* 움직임 줄이기 설정을 켠 사람에게는 멈춘 화면 */
+@media (prefers-reduced-motion: reduce) {
+  .scene *,
+  .scene *::before,
+  .scene *::after {
+    animation: none !important;
+  }
+}

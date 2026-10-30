@@ -1,21 +1,24 @@
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Bell, ClipboardList, Sparkles, Users } from "lucide-react";
 
 import { siteConfig } from "@/site.config";
 import { getItems } from "@/lib/data";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/layout/section-header";
-import { ShapeTile, stripTiles } from "@/components/ui/shapes";
+import { CheonanLoop } from "@/components/ui/cheonan-loop";
 
 /* 기능(항목) 섹션.
    - 제목/설명: site.config.ts 의 features
-   - 카드 목록: 관리자 페이지(/admin)에서 관리 (Supabase 연결 전에는 예시 카드가 보임) */
+   - 카드 목록: 관리자 페이지(/admin)에서 관리 (Supabase 연결 전에는 예시 카드가 보임)
+   - 첫 번째 카드의 그림 자리에는 사진 대신 천안 원통 애니메이션이 나옴 */
+const cardIcons = [ClipboardList, Bell, Users, Sparkles];
+
 export async function Features() {
   const { features } = siteConfig;
   const items = await getItems("features");
 
   return (
-    <section id="features" className="scroll-mt-16 py-24">
+    <section id="courses" className="scroll-mt-16 py-24">
       <Container>
         <SectionHeader
           eyebrow={features.eyebrow}
@@ -28,10 +31,14 @@ export async function Features() {
         ) : (
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item, index) => {
+              const Icon = cardIcons[index % cardIcons.length];
               const card = (
-                <article className="group h-full overflow-hidden rounded-3xl bg-card transition-transform duration-300 hover:-translate-y-1">
-                  <div className="relative aspect-[4/3] bg-muted">
-                    {item.image_url ? (
+                <article className="glass group h-full overflow-hidden rounded-3xl transition-transform duration-300 hover:-translate-y-1">
+                  <div className="relative aspect-[4/3] bg-muted/60">
+                    {index === 0 ? (
+                      /* 첫 번째 카드는 천안 원통 애니메이션 (글자는 site.config.ts 의 features.loop) */
+                      <CheonanLoop {...features.loop} />
+                    ) : item.image_url ? (
                       <Image
                         src={item.image_url}
                         alt={item.title}
@@ -40,11 +47,12 @@ export async function Features() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      /* 사진이 없으면 도형 장식 (카드마다 다른 도형) */
-                      <ShapeTile
-                        {...stripTiles[index % stripTiles.length]}
-                        className="size-full p-[22%]"
-                      />
+                      /* 사진이 없으면 아이콘 상자 */
+                      <div className="flex h-full items-center justify-center">
+                        <span className="icon-box size-20">
+                          <Icon className="size-9" />
+                        </span>
+                      </div>
                     )}
                   </div>
                   <div className="p-6">
