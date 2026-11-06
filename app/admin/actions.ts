@@ -4,7 +4,8 @@
    - login / logout      : 로그인, 로그아웃
    - saveItem            : 카드 추가 또는 수정 (이미지 업로드 포함)
    - deleteItem          : 카드 삭제
-   - saveHeroText        : 히어로 문구 7개 저장 */
+   - saveHeroText        : 히어로 문구 7개 저장
+   - deleteApplication   : 수강신청 1건 삭제 */
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -160,4 +161,18 @@ export async function saveHeroText(_prev: ActionState, formData: FormData): Prom
   revalidatePath("/");
   revalidatePath("/admin");
   return { ok: true, message: "저장했습니다. 사이트에 바로 반영됩니다." };
+}
+
+/* ---------- 수강신청 삭제 ---------- */
+
+export async function deleteApplication(formData: FormData) {
+  if (!(await isAdmin())) return;
+  const supabase = getAdminClient();
+  if (!supabase) return;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await supabase.from("applications").delete().eq("id", id);
+  revalidatePath("/admin");
 }

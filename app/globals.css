@@ -2,6 +2,8 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 /* 제목용 굵고 깔끔한 영문 폰트 (Plus Jakarta Sans) — 한글은 자동으로 Pretendard 로 보입니다 */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+/* 소개 섹션 손글씨 문구 글꼴 (Gaegu) */
+@import url("https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap");
 /* 수업과정 첫 번째 카드의 천안 원통 애니메이션 글꼴 (Black Han Sans) */
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
 @import "tailwindcss";
@@ -55,6 +57,8 @@
   --input: #2c2c6b;
   --ring: #a855f7;
 
+  --highlight: #fde047; /* 노란 강조 글자 (소개 섹션 등) */
+
   /* 폰트 */
   --font-body: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", var(--font-body); /* 제목용 폰트 — 원래대로 하려면 var(--font-body) 로 */
@@ -102,6 +106,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+  --font-hand: "Gaegu", var(--font-body);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

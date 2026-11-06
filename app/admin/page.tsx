@@ -14,9 +14,24 @@ import { LoginForm } from "./_components/login-form";
 import { ItemForm } from "./_components/item-form";
 import { DeleteButton } from "./_components/delete-button";
 import { HeroForm } from "./_components/hero-form";
+import { DeleteApplicationButton } from "./_components/delete-application-button";
 
-/** 카드 섹션 탭과 별도로 있는 '히어로 문구' 탭의 주소 값 */
+/** 카드 섹션 탭과 별도로 있는 '히어로 문구' / '수강신청' 탭의 주소 값 */
 const HERO_TAB = "hero";
+const APPLY_TAB = "applications";
+
+/** 수강신청 1건 (supabase/schema.sql 의 applications 표) */
+type Application = {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  course: string;
+  age_group: string | null;
+  region: string | null;
+  message: string | null;
+  created_at: string;
+};
 
 /* 관리자 페이지 (주소: /admin)
    1) 비밀번호가 설정 안 됐으면 → 설정 안내
@@ -81,6 +96,7 @@ export default async function AdminPage(props: PageProps<"/admin">) {
   const sections = siteConfig.adminSections;
   const requested = typeof searchParams.section === "string" ? searchParams.section : undefined;
   const isHeroTab = requested === HERO_TAB;
+  const isApplyTab = requested === APPLY_TAB;
   const current = sections.find((s) => s.key === requested) ?? sections[0];
 
   // 상단 바 + 탭 (모든 탭에서 같이 씀)
@@ -112,11 +128,14 @@ export default async function AdminPage(props: PageProps<"/admin">) {
             key={s.key}
             asChild
             size="sm"
-            variant={!isHeroTab && s.key === current.key ? "default" : "outline"}
+            variant={!isHeroTab && !isApplyTab && s.key === current.key ? "default" : "outline"}
           >
             <Link href={`/admin?section=${s.key}`}>{s.label}</Link>
           </Button>
         ))}
+        <Button asChild size="sm" variant={isApplyTab ? "default" : "outline"}>
+          <Link href={`/admin?section=${APPLY_TAB}`}>수강신청</Link>
+        </Button>
       </nav>
     </>
   );
@@ -147,6 +166,71 @@ export default async function AdminPage(props: PageProps<"/admin">) {
         <section className="mt-8 max-w-2xl rounded-xl border p-6">
           <h2 className="mb-5 text-lg font-semibold">히어로(첫 화면) 문구</h2>
           <HeroForm fields={HERO_TEXT_FIELDS.map((f) => ({ ...f, value: values[f.key] }))} />
+        </section>
+      </Container>
+    );
+  }
+
+  if (isApplyTab) {
+    const { data: appData, error: appError } = await supabase
+      .from("applications")
+      .select("*")
+      .order("created_at", { ascending: false });
+    const applications = (appData ?? []) as Application[];
+
+    return (
+      <Container className="py-10">
+        {header}
+        {appError ? (
+          <p className="mt-6 rounded-lg border border-destructive/40 p-4 text-sm text-destructive">
+            수강신청 표를 불러오지 못했습니다: {appError.message}
+            <br />
+            supabase/schema.sql 을 Supabase SQL Editor 에서 다시 실행하세요.
+          </p>
+        ) : null}
+        <section className="mt-8">
+          <h2 className="mb-5 text-lg font-semibold">
+            접수된 수강신청 <span className="text-muted-foreground">({applications.length})</span>
+          </h2>
+          {applications.length === 0 ? (
+            <p className="text-sm text-muted-foreground">아직 접수된 신청이 없습니다.</p>
+          ) : (
+            <ul className="space-y-3">
+              {applications.map((a) => (
+                <li key={a.id} className="rounded-xl border p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold">
+                        {a.name} <span className="ml-2 text-sm font-normal text-muted-foreground">{a.course}</span>
+                      </p>
+                      <p className="mt-1 text-sm">
+                        <a href={`tel:${a.phone}`} className="underline-offset-4 hover:underline">
+                          {a.phone}
+                        </a>
+                        {a.email ? (
+                          <>
+                            {" · "}
+                            <a href={`mailto:${a.email}`} className="underline-offset-4 hover:underline">
+                              {a.email}
+                            </a>
+                          </>
+                        ) : null}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {[a.age_group, a.region].filter(Boolean).join(" · ") || "연령대·지역 미선택"}
+                        {" · "}
+                        {new Date(a.created_at).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })} 접수
+                      </p>
+                    </div>
+                    <DeleteApplicationButton id={a.id} name={a.name} />
+                  </div>
+                  {a.message ? (
+                    <p className="mt-3 whitespace-pre-line rounded-lg bg-muted/50 p-3 text-sm">{a.message}</p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </Container>
     );

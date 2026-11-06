@@ -62,3 +62,23 @@ create policy "Anyone can read site texts"
   on public.site_texts for select
   to anon, authenticated
   using (true);
+
+-- 6) 수강신청을 저장하는 표 (주소 /apply 의 신청서)
+--    개인정보라서 방문자 읽기·쓰기 규칙을 만들지 않음
+--    → 신청서 저장과 관리자 목록 보기 모두 서버의 비밀 키(SECRET KEY)로만 가능
+create table if not exists public.applications (
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null,                       -- 이름
+  phone       text not null,                       -- 연락처
+  email       text,                                -- 이메일 (선택)
+  course      text not null,                       -- 희망 과정
+  age_group   text,                                -- 연령대
+  region      text,                                -- 거주 지역
+  message     text,                                -- 하고 싶은 말
+  agreed_at   timestamptz not null default now(),  -- 개인정보 수집 동의 시각
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists applications_created_idx on public.applications (created_at desc);
+
+alter table public.applications enable row level security;

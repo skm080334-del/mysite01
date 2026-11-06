@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>숏츠 크리에이터 3일 완성 클래스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  /* 사이트와 같은 남색·보라 톤 */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 100% 0%, #a855f759, transparent 40%),
+      radial-gradient(circle at 0% 100%, #a855f740, transparent 40%),
+      #0b0b2e;
+    color: #f5f3ff;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  }
+  .bar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px max(16px, calc((100% - 760px) / 2));
+    background: #0b0b2ecc;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2c2c6b;
+  }
+  .homebtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 99px;
+    background: linear-gradient(110deg, #2f3cf0, #a855f7);
+    color: #fff; text-decoration: none; font-size: 14px; font-weight: 700;
+    box-shadow: 0 8px 30px -8px #a855f7;
+  }
+  .homebtn:hover { filter: brightness(1.1); }
+  .title { font-size: 15px; font-weight: 700; color: #d4c2fc; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 56px; }
+  img {
+    display: block; width: 100%; height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 60px -12px #a855f7aa;
+  }
+  .poster { position: relative; }
+  /* 포스터 그림 속 "교안 다운로드 / 강의계획서 다운로드" 버튼 자리 (이미지 크기 기준 %) */
+  .hotspot {
+    position: absolute; top: 86.2%; height: 8.2%;
+    border-radius: 999px;
+    transition: background-color .2s, box-shadow .2s;
+  }
+  .hotspot.guide { left: 8.2%; width: 39.4%; }
+  .hotspot.plan  { left: 48.6%; width: 44.2%; }
+  .hotspot:hover { background: #ffffff2e; box-shadow: 0 0 0 3px #fffa; }
+  @media (max-width: 480px) { .title { display: none; } }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="homebtn" href="/#courses">← 홈으로</a>
+    <span class="title">숏츠 크리에이터 3일 완성 클래스</span>
+  </div>
+  <main>
+    <div class="poster">
+    <img
+      src="/courses/shorts-3day.webp"
+      alt="숏츠 크리에이터 3일 완성 클래스 안내: 하루 3시간씩 총 3일(9시간) 동안 숏츠 영상 1편 완성. 1일차 아이디어를 영상으로(숏츠 이해, 아이디어 발굴, 6컷 콘티 작성, 스마트폰 촬영 실습), 2일차 편집으로 재미를 더하자(컷 편집, 첫 3초 연출, 자막 넣기, 배경음악·효과음 적용), 3일차 나도 숏츠 크리에이터(최종 영상 완성, 제목·표지 제작, 영상 내보내기, 작품 상영회). 기획, 촬영, 편집, 발표를 배웁니다."
+    />
+    <!-- 포스터 아래 그림 버튼 위에 겹친 투명 버튼 -->
+    <a class="hotspot guide" href="/courses/shorts-3day-guide.html" aria-label="교안 보기 (웹페이지)"></a>
+    <a class="hotspot plan" href="/courses/shorts_3day_training_plan.docx" download="숏츠_크리에이터_3일_강의계획서.docx" aria-label="강의계획서 내려받기 (DOCX)"></a>
+    </div>
+  </main>
+</body>
+</html>

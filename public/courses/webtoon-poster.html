@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>웹툰 만들기 3일 교육과정</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  /* 사이트와 같은 남색·보라 톤 */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 100% 0%, #a855f759, transparent 40%),
+      radial-gradient(circle at 0% 100%, #a855f740, transparent 40%),
+      #0b0b2e;
+    color: #f5f3ff;
+    font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  }
+  .bar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px max(16px, calc((100% - 760px) / 2));
+    background: #0b0b2ecc;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2c2c6b;
+  }
+  .homebtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 99px;
+    background: linear-gradient(110deg, #2f3cf0, #a855f7);
+    color: #fff; text-decoration: none; font-size: 14px; font-weight: 700;
+    box-shadow: 0 8px 30px -8px #a855f7;
+  }
+  .homebtn:hover { filter: brightness(1.1); }
+  .title { font-size: 15px; font-weight: 700; color: #d4c2fc; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 56px; }
+  img {
+    display: block; width: 100%; height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 60px -12px #a855f7aa;
+  }
+  .poster { position: relative; }
+  /* 포스터 그림 속 "강의계획서 다운로드 / 강사용 교안 다운로드" 버튼 자리 (이미지 크기 기준 %) */
+  .hotspot {
+    position: absolute; top: 89.6%; height: 7.8%;
+    border-radius: 999px;
+    transition: background-color .2s, box-shadow .2s;
+  }
+  .hotspot.plan  { left: 7.4%; width: 41.6%; }
+  .hotspot.guide { left: 51%; width: 41%; }
+  .hotspot:hover { background: #ffffff2e; box-shadow: 0 0 0 3px #fffa; }
+  @media (max-width: 480px) { .title { display: none; } }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="homebtn" href="/#courses">← 홈으로</a>
+    <span class="title">웹툰 만들기 3일 교육과정</span>
+  </div>
+  <main>
+    <div class="poster">
+    <img
+      src="/courses/webtoon-poster.webp"
+      alt="웹툰 만들기 3일 교육과정 안내: 아이디어부터 완성까지 나만의 웹툰 1편을 직접 만들어 봐요. 웹툰이 처음인 분, 인스타툰을 시작하고 싶은 분께 추천. 1일차 기획과 캐릭터 만들기(웹툰과 인스타툰 이해, 아이디어와 소재 발굴, 캐릭터 디자인, 4컷 콘티 작성), 2일차 웹툰 제작하기(디지털 드로잉 도구, 컷 구성과 연출, 말풍선과 대사·배경, 웹툰 원고 4~8컷), 3일차 작품 완성과 발표(작품 수정, 제목·소개글 작성, 인스타툰 게시 형식 편집, 발표와 피드백)."
+    />
+    <!-- 포스터 아래 그림 버튼 위에 겹친 투명 버튼 -->
+    <a class="hotspot plan" href="/courses/instatoon_3day_plan.docx" download="웹툰_만들기_3일_강의계획서.docx" aria-label="강의계획서 내려받기 (DOCX)"></a>
+    <a class="hotspot guide" href="/courses/instatoon-3day.html" aria-label="강사용 교안 보기 (웹페이지)"></a>
+    </div>
+  </main>
+</body>
+</html>

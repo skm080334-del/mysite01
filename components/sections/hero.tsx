@@ -33,7 +33,7 @@ export async function Hero() {
         aria-hidden
         className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-background to-transparent"
       />
-      <Container className="grid min-h-[80svh] items-center gap-14 py-16 lg:grid-cols-[1.1fr_1fr] lg:py-24">
+      <Container className="grid min-h-[80svh] items-center py-16 lg:py-24">
         <div>
           <p className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-secondary">
             <Bell className="size-4" />

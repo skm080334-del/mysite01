@@ -5,13 +5,11 @@ import { siteConfig } from "@/site.config";
 import { getItems } from "@/lib/data";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/layout/section-header";
-import { CheonanLoop } from "@/components/ui/cheonan-loop";
 
 /* 기능(항목) 섹션.
    - 제목/설명: site.config.ts 의 features
    - 카드 목록: 관리자 페이지(/admin)에서 관리 (Supabase 연결 전에는 예시 카드가 보임)
-   - 첫 번째 카드의 그림 자리에는 사진 대신 천안 원통 애니메이션이 나옴
-   - 두 번째 카드의 그림 자리에는 site.config.ts 의 features.secondCardImage 이미지가 나옴 */
+   - 카드별 제목·그림·링크는 site.config.ts 의 features.cards 에서 정함 */
 const cardIcons = [ClipboardList, Bell, Users, Sparkles];
 
 export async function Features() {
@@ -33,28 +31,18 @@ export async function Features() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item, index) => {
               const Icon = cardIcons[index % cardIcons.length];
+              // site.config.ts 의 features.cards 에 정해 둔 제목·그림·링크가 있으면 그것을 씀
+              const override = features.cards[index];
+              const linkUrl = override?.link ?? item.link_url;
+              const title = override?.title ?? item.title;
+              const imageUrl = override?.image ?? item.image_url;
               const card = (
                 <article className="glass group h-full overflow-hidden rounded-3xl transition-transform duration-300 hover:-translate-y-1">
                   <div className="relative aspect-[4/3] bg-muted/60">
-                    {index === 0 ? (
-                      /* 첫 번째 카드는 천안 원통 애니메이션 (글자는 site.config.ts 의 features.loop) */
-                      <CheonanLoop {...features.loop} />
-                    ) : index === 1 ? (
-                      /* 두 번째 카드는 정해 둔 이미지 (site.config.ts 의 features.secondCardImage).
-                         네 컷 그림이 잘리지 않도록 전체가 보이게 맞춤 */
-                      <div className="absolute inset-0 bg-secondary">
-                        <Image
-                          src={features.secondCardImage}
-                          alt={item.title}
-                          fill
-                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          className="object-contain transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    ) : item.image_url ? (
+                    {imageUrl ? (
                       <Image
-                        src={item.image_url}
-                        alt={item.title}
+                        src={imageUrl}
+                        alt={title}
                         fill
                         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -70,8 +58,8 @@ export async function Features() {
                   </div>
                   <div className="p-6">
                     <h3 className="flex items-center justify-between gap-2 text-xl font-bold">
-                      {item.title}
-                      {item.link_url ? (
+                      {title}
+                      {linkUrl ? (
                         <ArrowUpRight className="size-4 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       ) : null}
                     </h3>
@@ -84,8 +72,8 @@ export async function Features() {
                 </article>
               );
 
-              return item.link_url ? (
-                <a key={item.id} href={item.link_url} target="_blank" rel="noreferrer">
+              return linkUrl ? (
+                <a key={item.id} href={linkUrl} target="_blank" rel="noreferrer">
                   {card}
                 </a>
               ) : (
