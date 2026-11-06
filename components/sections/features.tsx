@@ -10,7 +10,8 @@ import { CheonanLoop } from "@/components/ui/cheonan-loop";
 /* 기능(항목) 섹션.
    - 제목/설명: site.config.ts 의 features
    - 카드 목록: 관리자 페이지(/admin)에서 관리 (Supabase 연결 전에는 예시 카드가 보임)
-   - 첫 번째 카드의 그림 자리에는 사진 대신 천안 원통 애니메이션이 나옴 */
+   - 첫 번째 카드의 그림 자리에는 사진 대신 천안 원통 애니메이션이 나옴
+   - 두 번째 카드의 그림 자리에는 site.config.ts 의 features.secondCardImage 이미지가 나옴 */
 const cardIcons = [ClipboardList, Bell, Users, Sparkles];
 
 export async function Features() {
@@ -38,6 +39,18 @@ export async function Features() {
                     {index === 0 ? (
                       /* 첫 번째 카드는 천안 원통 애니메이션 (글자는 site.config.ts 의 features.loop) */
                       <CheonanLoop {...features.loop} />
+                    ) : index === 1 ? (
+                      /* 두 번째 카드는 정해 둔 이미지 (site.config.ts 의 features.secondCardImage).
+                         네 컷 그림이 잘리지 않도록 전체가 보이게 맞춤 */
+                      <div className="absolute inset-0 bg-secondary">
+                        <Image
+                          src={features.secondCardImage}
+                          alt={item.title}
+                          fill
+                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                          className="object-contain transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
                     ) : item.image_url ? (
                       <Image
                         src={item.image_url}

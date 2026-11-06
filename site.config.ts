@@ -56,6 +56,8 @@ export const siteConfig = {
       badge: "천안 · 2026",
       chip: "천안을 배우는 AI 수업", // 맨 아래 주황 배지
     },
+    /* 두 번째 카드 그림 자리에 넣을 이미지 (public 폴더 안의 파일) */
+    secondCardImage: "/course-2.png",
   },
 
   /* 연락처 섹션 */
